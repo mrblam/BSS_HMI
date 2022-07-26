@@ -10,6 +10,7 @@ interprocesscom::interprocesscom(QObject *parent) : QObject(parent)
         return;
     }
 
+
 #if 0 // get random server port
     QList<QHostAddress> ipAddressesList = QNetworkInterface::allAddresses();
     // use the first non-localhost IPv4 address
@@ -31,8 +32,9 @@ interprocesscom::interprocesscom(QObject *parent) : QObject(parent)
     qDebug() << "  port is " << tcpServer->serverPort();
     fortunes << tr("You've been leading a dog's life. Stay off the furniture.");
 
-    connect(tcpServer, &QTcpServer::newConnection, this, &interprocesscom::sendMessage);
+//    connect(tcpServer, &QTcpServer::newConnection, this, &interprocesscom::sendMessage);
     connect(serverRead, &QIODevice::readyRead,this,&interprocesscom::readMessage);
+
     connect(&heartbeatsend,&QTimer::timeout,this,&interprocesscom::connectToBssHmi);
     heartbeatsend.start(1000);
     }
@@ -46,7 +48,7 @@ void interprocesscom::sendMessage()
 //      out << fortunes;
     QTcpSocket *clientConnection = tcpServer->nextPendingConnection();
     clientConnection->write("app 1 gui diii ");
-    qDebug() << "server send" << clientConnection;
+//    qDebug() << "app1 send" << clientConnection;
 //      connect(clientConnection, &QAbstractSocket::disconnected,
 //            clientConnection, &QObject::deleteLater);
 //      clientConnection->flush();
@@ -57,22 +59,24 @@ void interprocesscom::sendMessage()
 
 void interprocesscom::readMessage()
 {
-    qDebug() << "co tin hieu readyRead,du lieu nhan duoc la : ";
-    serverRead->waitForReadyRead(3000);
+    qDebug() << "co tin hieu readyRead,du lieu nhan duoc tu bss-hmi la : ";
+    serverRead->waitForReadyRead(2000);
     qDebug() << "Reading : " << serverRead->bytesAvailable();
     qDebug() << serverRead->readAll();
-    serverRead->close();
+//    serverRead->close();
 }
 void interprocesscom::connectToBssHmi()
 {
     serverRead->abort();
     serverRead->connectToHost("localhost",TCP_SERVER_PORT_READ);
-    if(serverRead->waitForConnected(3000))
+    qDebug() <<serverRead->openMode();
+    if(serverRead->waitForConnected(1000))
     {
         qDebug() << "bss-hmi connected " ;
     }
     else
     {
-        qDebug() << "ko ket noi" ;
+        qDebug() << "Reconnect" ;
+
     }
 }

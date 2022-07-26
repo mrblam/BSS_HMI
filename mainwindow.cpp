@@ -54,7 +54,7 @@ void MainWindow::scanning()
 {
     qDebug() << "show" << CurrentVersion->state();
 
-return;
+//return;
     if(CurrentVersion->state() == 0){
         this->openCurrentVersion();
 
