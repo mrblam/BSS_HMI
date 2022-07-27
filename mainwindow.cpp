@@ -9,10 +9,12 @@ QProcess::ProcessError errorCode;
 
 
 
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(interprocesscom *p_inter,QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    this->ICP = p_inter;
+
 
     ui->setupUi(this);
     this->isStart = false;
@@ -53,9 +55,10 @@ void MainWindow::openNewVersion()
 void MainWindow::scanning()
 {
     qDebug() << "show" << CurrentVersion->state();
-
+    this->isStart = ICP->getReStart();
+    qDebug() <<ICP->getReStart() <<this->isStart;
 //return;
-    if(CurrentVersion->state() == 0){
+    if(CurrentVersion->state() == 0 || this->isStart == true){
         this->openCurrentVersion();
 
         qDebug() <<  "restart bss-hmi "  ;

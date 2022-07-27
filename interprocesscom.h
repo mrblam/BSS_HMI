@@ -22,6 +22,9 @@ class interprocesscom : public QObject
     Q_OBJECT
 public:
     interprocesscom(QObject *parent = nullptr);
+    static interprocesscom* getInterProcessCom();
+    bool reStart;
+    bool getReStart();
 private slots:
     void sendMessage();
     void readMessage();

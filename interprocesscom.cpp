@@ -72,11 +72,25 @@ void interprocesscom::connectToBssHmi()
     qDebug() <<serverRead->openMode();
     if(serverRead->waitForConnected(1000))
     {
-        qDebug() << "bss-hmi connected " ;
+        qDebug() << "bss-hmi connected " <<reStart ;
+        reStart = false;
     }
     else
     {
         qDebug() << "Reconnect" ;
+        reStart = true;
 
     }
+}
+interprocesscom * interprocesscom:: getInterProcessCom()
+{
+    static interprocesscom* self;
+    if(self==nullptr){
+        self=new interprocesscom();
+    }
+    return self;
+}
+bool interprocesscom :: getReStart()
+{
+    return reStart;
 }

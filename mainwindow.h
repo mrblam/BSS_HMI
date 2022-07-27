@@ -5,6 +5,7 @@
 #include <QProcess>
 #include <QDebug>
 #include <QTimer>
+#include "interprocesscom.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -16,11 +17,11 @@ class MainWindow : public QMainWindow
 private:
     QTimer ScanningFrequency;
     bool isStart;
-
+    interprocesscom *ICP;
 
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    MainWindow(interprocesscom *p_inter,QWidget *parent = nullptr);
     ~MainWindow();
 
 private slots:
